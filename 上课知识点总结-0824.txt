@@ -1,0 +1,445 @@
+https://play.kotlinlang.org/
+
+https://developer.android.google.cn/kotlin
+
+https://github.com/fangyong2/android
+
++----------------------------------------------------------------------------+
+| kotlin        															|
++----------------------------------------------------------------------------+
++----------------------------------------------------------------------------+
+| Android activity resetful api ui component        						|
++----------------------------------------------------------------------------+
+
++----------------------------------------------------------------------------+
+| kotlin :变量 类型转换 字符串模版 if表达式 when表达式 函数定义 数组 For 循环         |
++----------------------------------------------------------------------------+
+| kotlin :集合 collection (list set), map  		 							|
++----------------------------------------------------------------------------+
+| kotlin :类  继承 封装 多态 抽象类 接口  java --> kotlin								 |
++----------------------------------------------------------------------------+
+
++----------------------------------------------------------------------------+
+| kotlin :变量 类型转换 字符串模版 if表达式 when表达式 函数定义 数组 For 循环         |
++----------------------------------------------------------------------------+
+println("Hello World!")
+
+/*变量*/
+val a:Int = 1
+val b:Int = 2
+val c:Float = 1.0f
+val d:Double = 1.0
+val e:Char = 'e'
+var f:String = "fy"
+var g:Boolean = true
+
+println(a==b)
+
+/*类型转换*/
+val aa:Byte = 1
+val bb:Int = c.toInt()
+val cc = 1L+3 //Long+Int => Long
+
+/*字符串模版*/
+val i = 10
+val s = "i=$i"
+println(s)
+println("length is ${s.length}")
+
+/*if表达式*/
+val score = 60
+if(score>=60){
+    println("ok")
+}else{
+    println("not ok")
+}
+
+if(score>=90){
+    println("A")
+}else if(score>=80){
+    println("B")
+}else if(score>=70){
+    println("C")
+}else if(score>=60){
+    println("D")
+}else{
+    println("E")
+}
+
+/*变量+if*/
+val result = if(score>=60){
+    "ok"
+}else{
+    "not ok"
+}
+println("变量+if:$result")
+
+/*when表达式*/
+when{
+    score>=60 -> println("ok")
+    else -> println("not ok")
+}
+
+val degress = "A"
+when(degress){
+    "A" -> println("90-100")
+    "B" -> println("80-90")
+    "C" -> println("70-80")
+    "D" -> println("60-70")
+    else -> {
+        println("60以下")
+    }
+}
+
+val menu = 2
+/*when表达式,分支相同的方式处理*/
+when(menu){
+    1,2 -> println("菜单1 or 菜单2")
+    else -> {
+        println("菜单3")
+    }
+}
+
+when(menu){
+    in 1..10 -> println("menu is in the range")
+    !in 10..20 -> println("menu is outside the range")
+    else -> println("none of the above")
+}
+
+
+/*函数定义*/
+fun sum(a:Int,b:Int):Int{
+    return a+b
+}
+println(sum(10,20))
+
+/*函数+when*/
+fun menu(x:Int) = when(x){
+    in 1..10 -> println("x is in range")
+    else -> println("none of the above")
+}
+menu(2)
+
+/*if+when*/
+val detail = when(degress){
+    "A" -> "90-100"
+    "B" -> "80-90"
+    "C" -> "70-80"
+    "D" ->"60-70"
+    else -> {
+        "60以下"
+    }
+}
+println(detail)
+
+/*数组*/
+val arrayA = arrayOf(1,2,"fy")//[1,2,3]
+val arrayB = Array(3,{i -> (i * 2) })
+println(arrayA.get(0))
+println(arrayB.get(1))
+
+val arrayC = intArrayOf(1,2,3)
+println(arrayC.get(0))
+
+/*For 循环*/
+//for (item in collection) print(item)
+//for (i in array.indices) { print(array[i]) }
+//for ((index, value) in array.withIndex()) { println("the element at $index is $value")}
+for(value in array){
+    println(value)
+}
+
+//for(int i=0;i<aray.length;i++)
+for(index in array.indices){
+    println(array[index])
+}
+
+for((index,value) in array.withIndex()){
+    println("index=$index,value=$value")
+}
+
+//1+2+3+4...10=55
+var sum = 0
+for(i in 1..10){
+    sum += i
+}
+println(sum)
+
+var j = 0
+sum = 0
+while(j<10){
+    j++
+    sum += j
+}
+println(sum)
+
+j = 0
+sum = 0
+do{
+    j++
+    sum += j
+}while (j<10)
+println(sum)
+
+//1++3+5...9 = 25
+j = 0
+sum = 0
+do{
+    j++
+    if(j % 2 == 0){
+        continue
+    }
+    sum += j
+}while (j<10)
+println(sum)
+
+//1++3+5. = 9
+j = 0
+sum = 0
+do{
+    j++
+    if(j % 2 == 0){
+        continue
+    }
+    if(j==7){
+        break
+    }
+    sum += j
+}while (j<10)
+println(sum)
+
++----------------------------------------------------------------------------+
+| kotlin :集合 collection (list set), map  		 							|
++----------------------------------------------------------------------------+
+Iterable：任何实现这个接口的，都可以遍历元素
+MutableIterable：继承Iterable接口。并提供给我们移除的方法
+
+Collection：元素的通用的范性集合，这个集合是一个只读的集合，它提供给我们可以获取集合的size，
+是否为空，是否包含某个或某组数据等方法。
+MutableCollection：继承Collection,MutableIterable。并提供了额外的函数add,addAll,remove,clear等方法
+
+List：继承Collection。一个范性有序的只读集合。因为有序，所以，我们可以使用get(position)等查询的方法
+MutableList：继承List，MutableCollection。一个有序集合。并额外提供了add/remove元素的方法
+
+Set：继承Collection。一个无序并不支持重复元素的集合
+MutableSet：继承Set，MutableCollection，一个无序的集合并且不支持重复元素。但是，支持add/remove元素
+
+Map：一个key-value的只读集合。并且key唯一。
+MutableMap：继承Map。支持put/remove元素
+
+/*list*/
+val mylist = listOf<Int>(1,2,3,4)
+//可写
+val mutableList = mutableListOf<Int>(5,6,7,8)
+//遍历
+for(value in mylist){
+    println(value)
+}
+for(value in mutableList){
+    println(value)
+}
+//添加
+mutableList.add(9)
+//修改
+mutableList[1] = 50
+//删除
+mutableList.remove(7)
+for(value in mutableList){
+    println(value)
+}
+
+/*set 无序 去重*/
+val mySet = setOf<Int>(10,20,20,30,40)
+//可写
+val mutableSet = mutableSetOf<Int>(10,20,20,30,40)
+for (value in mySet){
+    println(value)
+}
+for (value in mutableSet){
+    println(value)
+}
+//添加
+mutableSet.add(50)
+//修改
+
+//删除
+mutableSet.remove(50)
+for (value in mutableSet){
+    println(value)
+}
+
+/*map (key value)*/
+val myMap = mapOf<String,Int>("key1" to 1,"key2" to 2)
+val mutableMap = mutableMapOf<String,Int>("key1" to 1,"key2" to 2)
+myMap.forEach{
+    (key,value) -> println("key=$key,value=$value")
+}
+//添加
+mutableMap["key3"] = 3
+//修改
+mutableMap["key3"] = 5
+//删除
+mutableMap.remove("key3")
+
+mutableMap.forEach{
+        (key,value) -> println("key=$key,value=$value")
+}
+
++----------------------------------------------------------------------------+
+| kotlin :类  接口 继承 封装 多态											 |
++----------------------------------------------------------------------------+
+class Person {
+
+    private var name:String = ""
+        get() = field.lowercase()
+        set(value) = if (value==null){field="fy"}else{field = value}
+    private var age:Int = 0
+    private var gender:String = ""
+
+    init {
+        println("init...........")
+    }
+    constructor(){
+
+    }
+    constructor(name: String, age: Int, gender: String) {
+        this.name = name
+        this.age = age
+        this.gender = gender
+        println("constructor...........")
+    }
+
+    fun printTest(){
+        println("..........printTest..........")
+    }
+
+}
+
+
+open class Person {
+
+    private var name:String = ""
+        get() = field.lowercase()
+        set(value) = if (value==null){field="fy"}else{field = value}
+    private var age:Int = 0
+    private var gender:String = ""
+
+    init {
+        println("init...........")
+    }
+    constructor(){
+
+    }
+    constructor(name: String, age: Int, gender: String) {
+        this.name = name
+        this.age = age
+        this.gender = gender
+        println("constructor...........")
+    }
+
+    fun printTest(){
+        println("..........printTest..........")
+    }
+
+    open fun study(){
+        println("学习.........")
+    }
+
+}
+
+class Student(name: String, age: Int, gender: String) : Person(name, age, gender) {
+
+    override fun study() {
+        super.study()
+        println("我在读大学......")
+    }
+}
+
+
+open class A {
+    open fun openA(){
+        println("openDome.....")
+    }
+
+    fun dome(){
+        println("dome.....")
+    }
+}
+
+interface B {
+    fun b(){
+        println("b")
+    }
+}
+
+class C():A(),B {
+
+    override fun b() {
+        super.b()
+    }
+
+    override fun openA() {
+        super.openA()
+    }
+}
+
+
+var c = C();
+println(c.dome());
+c.b()
+c.openA()
+
+
+步骤1，出现菜单
+	欢 迎 使 用 迷 你 DVD 管 理 器
+	-------------------------------------
+	1. 新 增 DVD
+	2. 查 看 DVD
+	3. 删 除 DVD
+	4. 借 出 DVD
+	5. 归 还 DVD
+	6. 退 出DVD
+	--------------------------------------
+步骤2 查看
+
+	请选择： 2
+	---> 查看DVD
+
+	序号	状 态	名称		借出日期	借出次数
+	1	可借	<<风声鹤唳>>	0日	12次
+	2	已借出	<<罗马假日>>	1日	15次
+	3	可借	<<浪漫满屋>>	0日	30次
+	**************************
+
+步骤3 添加
+	请选择： 2
+	---> 查看DVD
+
+	序号	状 态	名称		借出日期	借出次数
+	1	可借	<<风声鹤唳>>	0日	12次
+	2	已借出	<<罗马假日>>	1日	15次
+	3	可借	<<浪漫满屋>>	0日	30次
+	**************************
+
+步骤4 删除
+
+
+满分学员
+Lyla Liu对所有人说 (下午3:13)
+
+Ting Zhang对所有人说 (下午3:13)
+
+Yuceng Mei对所有人说 (下午3:15)
+
+Yu Hao Zhang对所有人说 (下午3:41)
+
+Gabi Liang对所有人说 (下午3:51)
+
+Gabi Liang对所有人说 (下午3:51)
+
+
+Yu Hao Zhang对所有人说 (下午4:32)
+
+Sampson Liang对所有人说 (下午4:34)
+
+Sherward S H Zou对所有人说 (下午4:34)
