@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Application 5</string>
+    <string name="hello">hello world fang yong</string>
+
+    <string name="name">请输入dvd的名称：</string>
+    <string name="submit">提交</string>
+    <string name="add">添加</string>
+</resources>
