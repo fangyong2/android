@@ -1,0 +1,386 @@
++-----------------------------------------------------------------------------------------+
+| android开发环境搭建																		  |
++-----------------------------------------------------------------------------------------+
+| https://developer.android.google.cn/studio#downloads	|android studio下载地址	          |
++-------------------------------------------------------+---------------------------------+
+| sdk android系统版本										|10 11 12任意选择一个安装，推荐11。	  |
++-------------------------------------------------------+---------------------------------+
+| avd android模拟器										|选择4寸  WVGA (Nexus S)	          |
++-------------------------------------------------------+---------------------------------+
+
+deng Amelia对所有人说 (上午11:04)
+
+SishiLi对所有人说 (上午11:05)
+
+Qi Kai Su对所有人说 (上午11:05)
+
+Qi Kai Su对所有人说 (上午11:27)
+6
+Louis Zhang对所有人说 (上午11:27)
+6
+Venus H X MO对所有人说 (上午11:28)
+6
+
+deng Amelia对所有人说 (下午12:07)
+8
+Qi Kai Su对所有人说 (下午12:09)
+8
+Evie CHEN对所有人说 (下午12:10)
+
+Qi Kai Su对所有人说 (下午3:03)
+
+Jasmine Du对所有人说 (下午3:13)
+SishiLi对所有人说 (下午3:15)
+
+Jasmine Du对所有人说 (下午3:36)
+Qi Kai Su对所有人说 (下午3:36)
+Venus H X MO对所有人说 (下午3:38)
+
+Jennifer S Zhao对所有人说 (下午4:20)
+1
+Qi Kai Su对所有人说 (下午4:21)
+1
+Jasmine Du对所有人说 (下午4:23)
+
+
+Jennifer S Zhao对所有人说 (下午4:44)
+5
+Qi Kai Su对所有人说 (下午4:45)
+5
+Wan Er Wang对所有人说 (下午4:49)
+5
+Jia Yu Wu对所有人说 (下午4:49)
+5
+
+
++-------------------------------------------------------+
+|RESTful风格接口											|
++-------------------------------------------------------+
+| URL											|Method +
++-----------------------------------------------+-------+
+| http://121.37.170.216:8080/dvd         		|GET	|
++-----------------------------------------------+-------+
+| http://121.37.170.216:8080/dvd?name=测试 		|PUT 	|						
++-----------------------------------------------+-------+
+| http://121.37.170.216:8080/dvd/测试			|DELETE	|		
++-----------------------------------------------+-------+
+
++-----------------------------------------------------------------------------------------+
+| hello world															  		 	  |
++-----------------------------------------------------------------------------------------+
+
++-----------------------------------------------------------------------------------------+
+| DVD添加功能																  		 	  |
++-----------------------------------------------------------------------------------------+
+strings.xml
+    <string name="name">请输入dvd的名称：</string>
+    <string name="submit">提交</string>
+
+activity_main布局
+   <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="@string/name"/>
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="fy" />
+
+        <Button
+            android:id="@+id/submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:text="@string/submit"/>
+    </LinearLayout>
+
+MainActivity.kt
+
+    fun initUI(){
+        //编辑框
+        val name:EditText = findViewById<EditText>(R.id.name)
+        //按钮
+        val submit: Button = findViewById<Button>(R.id.submit)
+
+        //输出编辑文本的值
+        println(name.text)
+        Toast.makeText(this,name.text,Toast.LENGTH_LONG).show()
+
+        //按钮绑定onclick事件
+        submit.setOnClickListener {
+            Toast.makeText(this,name.text,Toast.LENGTH_LONG).show()
+        }
+    }
+
++-----------------------------------------------------------------------------------------+
+| DVD查看功能---01																  		 	  |
++-----------------------------------------------------------------------------------------+
+activity_main.xml
+<androidx.appcompat.widget.LinearLayoutCompat
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:orientation="vertical"
+    tools:ignore="MissingConstraints">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:text="hello world...">
+    </TextView>
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" android:id="@+id/mylist">
+    </ListView>
+</androidx.appcompat.widget.LinearLayoutCompat>
+
+listview_item
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:id="@+id/name"></TextView>
+</LinearLayout>
+
+
+class Dvd {
+
+    var name:String = ""
+    var state:Int = 1
+    var date:Int = 0
+    var count:Int = 0
+
+    constructor(name: String, state: Int, date: Int, count: Int) {
+        this.name = name
+        this.state = state
+        this.date = date
+        this.count = count
+    }
+
+}
+
+class MainActivity : AppCompatActivity() {
+    /*listview MVC实现*/
+    //model
+    private var myList = mutableListOf<Dvd>()
+    //view
+    private var  listview: ListView? = null
+    //controller
+    private var adapter = MyAdapter(this, myList)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        //初始化数据
+        initData()
+        //初始化UI
+        initUI()
+    }
+
+    private fun initData(){
+        val dvd1 = Dvd("风声鹤唳",1,0,12)
+        val dvd2 = Dvd("罗马假日",0,1,15)
+        val dvd3 = Dvd("浪漫满屋",1,1,30)
+        myList.add(dvd1)
+        myList.add(dvd2)
+        myList.add(dvd3)
+    }
+
+    private fun initUI(){
+        listview = findViewById(R.id.mylist)
+        listview?.adapter = adapter
+
+        listview?.setOnItemClickListener{
+                parent,view,position,id ->
+            val dvd= myList[position]
+            Toast.makeText(this,dvd.name,Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+
+
+class MyAdapter(var context: Context, var arr: MutableList<Dvd>) : BaseAdapter() {
+    //统计数据长度
+    override fun getCount(): Int {
+        return  arr.size
+    }
+
+    //子项目
+    override fun getItem(p0: Int): Any {
+        return  arr.get(p0)
+    }
+
+    //子项目的ID号
+    override fun getItemId(p0: Int): Long {
+        return  p0.toLong()
+    }
+
+    //子项目对应的视图
+    override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
+        //加载子项目UI组件
+        var view:View? = View.inflate(context,R.layout.listview_item,null)
+        //从子项目UI组件中提取name
+        var name:TextView? = view?.findViewById<TextView>(R.id.name)
+        //子视图加载过则从tag直接获取，否则视图存入tag
+        if(null==p1){
+            view?.tag = name
+        }else{
+            view = p1
+            name = view.tag as TextView
+        }
+        //指定文本内容
+        name?.text = arr.get(p0).name
+        return view!!
+    }
+}
+
++-----------------------------------------------------------------------------------------+
+| DVD查看功能---02																  		 	  |
++-----------------------------------------------------------------------------------------+
+MyAdapter.kt
+
+    //缓存是行,包含4个textview
+    inner class ViewHolder{
+        var name:TextView? = null
+        var state:TextView? = null
+        var date:TextView? = null
+        var count:TextView? = null
+
+        constructor(name: TextView?, state: TextView?, date: TextView?, count: TextView?) {
+            this.name = name
+            this.state = state
+            this.date = date
+            this.count = count
+        }
+    }
+
+    //子项目对应的视图
+    override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
+
+        //加载子项目UI组件
+        var view:View? = View.inflate(context,R.layout.listview_item,null)
+        //从子项目UI组件中提取所有TextView
+        var name:TextView? = view?.findViewById<TextView>(R.id.name)
+        var state:TextView? = view?.findViewById<TextView>(R.id.state)
+        var date:TextView? = view?.findViewById<TextView>(R.id.date)
+        var count:TextView? = view?.findViewById<TextView>(R.id.count)
+        var viewHolder:ViewHolder = ViewHolder(name,state,date,count)
+        //子视图加载过则从tag直接获取，否则视图存入tag
+        if(null==p1){
+            //view?.tag = name
+            view?.tag = viewHolder
+        }else{
+            view = p1
+            //name = view.tag as TextView
+            viewHolder = view.tag as ViewHolder
+        }
+        //指定文本内容
+        //name?.text = arr.get(p0).name
+        viewHolder.name?.text = arr.get(p0).name
+        viewHolder.state?.text = arr.get(p0).state.toString()
+        viewHolder.date?.text = arr.get(p0).date.toString()
+        viewHolder.count?.text = arr.get(p0).count.toString()
+        return view!!
+    }
+
+listview_item
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" android:orientation="horizontal">
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/name" android:layout_margin="10dp" android:layout_weight="1"></TextView>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/state" android:layout_margin="10dp" android:layout_weight="1"></TextView>
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/date" android:layout_margin="10dp" android:layout_weight="1"></TextView>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/count" android:layout_margin="10dp" android:layout_weight="1"></TextView>
+
+    </LinearLayout>
+
++-----------------------------------------------------------------------------------------+
+| DVD删除功能																	  		 	  |
++-----------------------------------------------------------------------------------------+
+private fun initUI(){
+    listview = findViewById(R.id.mylist)
+    listview?.adapter = adapter
+
+    listview?.setOnItemClickListener{
+            parent,view,position,id ->
+        val dvd= myList[position]
+        myList.remove(dvd)
+
+        //动态更新listview
+        adapter.notifyDataSetChanged();
+        Toast.makeText(this,dvd.name,Toast.LENGTH_SHORT).show()}
+}
+
++-----------------------------------------------------------------------------------------+
+| 页面美化+页面跳转                                                                          |
++-----------------------------------------------------------------------------------------+
+button?.setOnClickListener {
+    val intent:Intent = Intent(this,AddActivity::class.java)
+    startActivity(intent)
+}
+
+AndroidManifest.xml
+<activity
+    android:name=".AddActivity"
+    android:exported="true">
+    <intent-filter>
+        <category android:name="android.intent.category.DEFAULT" />
+    </intent-filter>
+</activity>
+
++-----------------------------------------------------------------------------------------+
+| restful api																  		 	  |
++-----------------------------------------------------------------------------------------+
+AndroidManifest.xml
+
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    android:usesCleartextTraffic="true"
+
+build.gradle
+    implementation("com.squareup.okhttp3:okhttp:4.2.2")
+
+
+//按钮绑定onclick事件
+submit.setOnClickListener {
+    //Toast.makeText(this,name.text,Toast.LENGTH_LONG).show()
+    //1.远程主机
+    val client = OkHttpClient()
+    val baseUrl = "http://121.37.170.216:8080"
+    val url = "$baseUrl/dvd"
+
+    //2.json数据
+    val json = JSONObject()
+    json.put("name",name.text)
+    val requestBody:RequestBody = json.toString().toRequestBody()
+
+    //3.构建页面request请求
+    var builder = Request.Builder()
+    builder.url(url)
+    builder.addHeader("Content-type","application/json")
+        .put(requestBody)
+
+    //4.页面响应
+    client.newCall(builder.build()).enqueue(object:Callback{
+        override fun onFailure(call: Call, e: IOException) {
+            println("失败$e")
+        }
+
+        override fun onResponse(call: Call, response: Response) {
+            val res = response.body?.string()
+            println("成功 $res")
+
+            runOnUiThread(){
+                Toast.makeText(this@AddActivity,res,Toast.LENGTH_LONG).show()
+            }
+        }
+
+    })
+}
+
+
+val access = JSONArray(res)
+for (i in 0..(access.length() - 1)) {
+    var obj: JSONObject = access.get(i) as JSONObject
+    var obj_name = obj.getString("name")
+}
